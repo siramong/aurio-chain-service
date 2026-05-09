@@ -2,8 +2,9 @@
   "name": "aurio-chain-service",
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.ts"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",

@@ -1,6 +1,6 @@
 # Aurio Chain Service
 
-Small Express/Bun service for Aurio on-chain actions.
+Small Express/Node.js service for Aurio on-chain actions.
 
 It currently handles:
 
@@ -10,7 +10,7 @@ It currently handles:
 
 ## Requirements
 
-- Bun
+- Node.js and npm
 - Solana devnet RPC
 - Supabase project
 - A Solana keypair that is allowed to mint the AURIO token and Tambu NFTs
@@ -36,8 +36,9 @@ For Supabase, prefer `SUPABASE_SERVICE_ROLE_KEY` because backend inserts can be 
 ## Run Locally
 
 ```bash
-bun install
-bun run src/index.ts
+npm install
+npm run build
+npm start
 ```
 
 The service starts on:
