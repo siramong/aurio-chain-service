@@ -1,0 +1,12 @@
+{
+    "name": "Aurio Rewards",
+    "description": "On-chain reward minting program for the Aurio ecosystem. Mints AURIO SPL tokens to users via PDA-signed CPI with enforced amount caps.",
+    "logo": "https://raw.githubusercontent.com/siramong/aurio-chain-service/main/logo.svg",
+    "project_url": "https://github.com/siramong/aurio-chain-service",
+    "contacts": ["email:security@aurio.xyz"],
+    "policy": "https://github.com/siramong/aurio-chain-service",
+    "preferred_languages": ["en", "es"],
+    "source_code": "https://github.com/siramong/aurio-chain-service",
+    "source_release": "v0.1.0",
+    "version": "0.1.0"
+}
