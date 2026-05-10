@@ -1,0 +1,56 @@
+{
+  "version": "0.1.0",
+  "name": "aurio_rewards",
+  "instructions": [
+    {
+      "name": "mint_reward",
+      "discriminator": [0, 0, 0, 0, 0, 0, 0, 0],
+      "accounts": [
+        {
+          "name": "reward_authority",
+          "writable": false,
+          "signer": false,
+          "docs": ["PDA derived from seed 'aurio_mint', acts as mint authority via CPI signer"]
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "signer": false,
+          "docs": ["The AURIO SPL token mint account"]
+        },
+        {
+          "name": "recipient_ata",
+          "writable": true,
+          "signer": false,
+          "docs": ["The recipient's associated token account"]
+        },
+        {
+          "name": "token_program",
+          "writable": false,
+          "signer": false,
+          "docs": ["The SPL Token program"]
+        }
+      ],
+      "args": [
+        {
+          "name": "discriminator",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64",
+          "docs": ["Human-readable AURIO amount (1-1000). Converted to base units (x10^6) on-chain."]
+        }
+      ],
+      "docs": [
+        "Mints AURIO SPL tokens to a recipient's associated token account.",
+        "The amount must be between 1 and 1000 (inclusive).",
+        "The program signs the CPI via a PDA derived from seed 'aurio_mint'."
+      ]
+    }
+  ],
+  "metadata": {
+    "origin": "vanilla-rust",
+    "address": "1PFy2CWq6n2YJJ9kHg7LDkBx5guSYvCH3UWmgKRZiSF"
+  }
+}
