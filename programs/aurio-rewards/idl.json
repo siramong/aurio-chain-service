@@ -1,56 +1,153 @@
 {
-  "version": "0.1.0",
-  "name": "aurio_rewards",
-  "instructions": [
-    {
-      "name": "mint_reward",
-      "discriminator": [0, 0, 0, 0, 0, 0, 0, 0],
-      "accounts": [
-        {
-          "name": "reward_authority",
-          "writable": false,
-          "signer": false,
-          "docs": ["PDA derived from seed 'aurio_mint', acts as mint authority via CPI signer"]
-        },
-        {
-          "name": "mint",
-          "writable": true,
-          "signer": false,
-          "docs": ["The AURIO SPL token mint account"]
-        },
-        {
-          "name": "recipient_ata",
-          "writable": true,
-          "signer": false,
-          "docs": ["The recipient's associated token account"]
-        },
-        {
-          "name": "token_program",
-          "writable": false,
-          "signer": false,
-          "docs": ["The SPL Token program"]
-        }
-      ],
-      "args": [
-        {
-          "name": "discriminator",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64",
-          "docs": ["Human-readable AURIO amount (1-1000). Converted to base units (x10^6) on-chain."]
-        }
-      ],
-      "docs": [
-        "Mints AURIO SPL tokens to a recipient's associated token account.",
-        "The amount must be between 1 and 1000 (inclusive).",
-        "The program signs the CPI via a PDA derived from seed 'aurio_mint'."
-      ]
-    }
-  ],
-  "metadata": {
-    "origin": "vanilla-rust",
-    "address": "1PFy2CWq6n2YJJ9kHg7LDkBx5guSYvCH3UWmgKRZiSF"
-  }
+  "kind": "rootNode",
+  "standard": "codama",
+  "version": "1.0.0",
+  "program": {
+    "kind": "programNode",
+    "name": "aurioRewards",
+    "publicKey": "1PFy2CWq6n2YJJ9kHg7LDkBx5guSYvCH3UWmgKRZiSF",
+    "version": "0.1.0",
+    "pdas": [
+      {
+        "kind": "pdaNode",
+        "name": "rewardAuthority",
+        "docs": [
+          "The PDA that serves as the sole mint authority for the AURIO SPL token.",
+          "Derived from the seed 'aurio_mint'."
+        ],
+        "seeds": [
+          {
+            "kind": "constantPdaSeedNode",
+            "value": {
+              "kind": "stringValueNode",
+              "string": "aurio_mint"
+            }
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      {
+        "kind": "instructionNode",
+        "name": "mintReward",
+        "docs": [
+          "Mints AURIO SPL tokens to a recipient's associated token account.",
+          "The amount must be between 1 and 1000 (inclusive).",
+          "The program signs the SPL Token mint_to CPI via a PDA derived from seed 'aurio_mint'.",
+          "The amount is converted to base units (multiplied by 10^6) on-chain."
+        ],
+        "optionalAccountStrategy": "programId",
+        "accounts": [
+          {
+            "kind": "instructionAccountNode",
+            "name": "rewardAuthority",
+            "docs": [
+              "PDA derived from seed 'aurio_mint'. Signs the inner CPI via invoke_signed.",
+              "Must be the current mint authority of the AURIO mint."
+            ],
+            "isSigner": false,
+            "isWritable": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "mint",
+            "docs": [
+              "The AURIO SPL token mint account.",
+              "Writable because mint_to increments supply."
+            ],
+            "isSigner": false,
+            "isWritable": true
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "recipientAta",
+            "docs": [
+              "The recipient's associated token account for AURIO.",
+              "Writable because mint_to credits tokens."
+            ],
+            "isSigner": false,
+            "isWritable": true
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "tokenProgram",
+            "docs": [
+              "The SPL Token program (TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA)."
+            ],
+            "isSigner": false,
+            "isWritable": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+            }
+          }
+        ],
+        "arguments": [
+          {
+            "kind": "instructionArgumentNode",
+            "name": "discriminator",
+            "docs": [],
+            "type": {
+              "kind": "numberTypeNode",
+              "format": "u8",
+              "endian": "le"
+            },
+            "defaultValueStrategy": "omitted",
+            "defaultValue": {
+              "kind": "numberValueNode",
+              "number": 0
+            }
+          },
+          {
+            "kind": "instructionArgumentNode",
+            "name": "amount",
+            "docs": [
+              "Human-readable AURIO amount. Must be between 1 and 1000 (inclusive).",
+              "Converted to base units (amount * 10^6) on-chain before the CPI."
+            ],
+            "type": {
+              "kind": "numberTypeNode",
+              "format": "u64",
+              "endian": "le"
+            }
+          }
+        ],
+        "discriminators": [
+          {
+            "kind": "fieldDiscriminatorNode",
+            "name": "discriminator",
+            "offset": 0
+          }
+        ]
+      }
+    ],
+    "definedTypes": [],
+    "errors": [
+      {
+        "kind": "errorNode",
+        "name": "invalidAmount",
+        "docs": [
+          "The amount must be between 1 and 1000 (inclusive)."
+        ],
+        "code": 2
+      },
+      {
+        "kind": "errorNode",
+        "name": "invalidInstructionData",
+        "docs": [
+          "Instruction data must be exactly 9 bytes with discriminator 0x00."
+        ],
+        "code": 12
+      },
+      {
+        "kind": "errorNode",
+        "name": "invalidRewardAuthorityPda",
+        "docs": [
+          "The reward_authority account does not match the expected PDA derived from ['aurio_mint']."
+        ],
+        "code": 2
+      }
+    ]
+  },
+  "additionalPrograms": []
 }
